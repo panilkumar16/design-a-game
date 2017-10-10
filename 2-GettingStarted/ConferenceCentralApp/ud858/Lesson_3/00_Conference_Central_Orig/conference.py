@@ -14,16 +14,12 @@ __author__ = 'wesc+api@google.com (Wesley Chun)'
 
 
 from datetime import datetime
-import json
-import os
-import time
 
 import endpoints
 from protorpc import messages
 from protorpc import message_types
 from protorpc import remote
 
-from google.appengine.api import urlfetch
 from google.appengine.ext import ndb
 
 from models import Profile
@@ -39,6 +35,7 @@ EMAIL_SCOPE = endpoints.EMAIL_SCOPE
 API_EXPLORER_CLIENT_ID = endpoints.API_EXPLORER_CLIENT_ID
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 
 @endpoints.api( name='conference',
                 version='v1',
@@ -83,14 +80,13 @@ class ConferenceApi(remote.Service):
         profile = None
         if not profile:
             profile = Profile(
-                key = p_key,  # TODO 1 step 4. replace with the key from step 3
+                key = None, # TODO 1 step 4. replace with the key from step 3
                 displayName = user.nickname(), 
                 mainEmail= user.email(),
                 teeShirtSize = str(TeeShirtSize.NOT_SPECIFIED),
             )
             # TODO 2
             # save the profile to datastore
-            profile.put()
 
         return profile      # return Profile
 
@@ -107,7 +103,6 @@ class ConferenceApi(remote.Service):
                     val = getattr(save_request, field)
                     if val:
                         setattr(prof, field, str(val))
-
             # TODO 4
             # put the modified profile to datastore
 
@@ -121,9 +116,7 @@ class ConferenceApi(remote.Service):
         """Return user profile."""
         return self._doProfile()
 
-    # TODO 1
-    # 1. change request class
-    # 2. pass request to _doProfile function
+
     @endpoints.method(ProfileMiniForm, ProfileForm,
             path='profile', http_method='POST', name='saveProfile')
     def saveProfile(self, request):
