@@ -258,7 +258,33 @@ class ConferenceApi(remote.Service):
             # return ConferenceForm
             return self._copyConferenceToForm(conf, getattr(prof, 'displayName'))
         
+    @endpoints.method(message_types.VoidMessage, ConferenceForms,
+            path='filterPlayground',
+            http_method='GET', name='filterPlayground')
+    def filterPlayground(self, request):
+        q = Conference.query()
+        # simple filter usage:
+        # q = q.filter(Conference.city == "Paris")
 
+        # advanced filter building and usage
+        # field = "city"
+        # operator = "="
+        # value = "London"
+        # f = ndb.query.FilterNode(field, operator, value)
+        # q = q.filter(f)
+
+        # TODO
+        # add 2 filters:
+        # 1: city equals to London
+        q = q.filter(Conference.city == "London")
+        # 2: topics equals "Medical Innovations"
+        q = q.filter(Conference.topics == "Medical Innovations")
+        # 3: Order by name
+        q = q.order(Conference.name)
+
+        return ConferenceForms(
+            items=[self._copyConferenceToForm(conf, "") for conf in q]
+        )
 
 # registers API
 api = endpoints.api_server([ConferenceApi]) 

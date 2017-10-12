@@ -16,7 +16,9 @@ def filterPlayground(self, request):
     # TODO
     # add 2 filters:
     # 1: city equals to London
+    q = q.filter(Conference.city == "London")
     # 2: topic equals "Medical Innovations"
+    q = q.filter(Conference.topic == "Medical Innovations")
 
     return ConferenceForms(
         items=[self._copyConferenceToForm(conf, "") for conf in q]
