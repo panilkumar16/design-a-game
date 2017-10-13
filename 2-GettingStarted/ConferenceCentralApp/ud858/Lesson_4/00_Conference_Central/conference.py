@@ -243,7 +243,7 @@ class ConferenceApi(remote.Service):
             items=[self._copyConferenceToForm(conf, displayName) for conf in conferences]
         )
         
-
+        # For Latter
         @endpoints.method(CONF_GET_REQUEST, ConferenceForm,
                 path='conference/{websafeConferenceKey}',
                 http_method='GET', name='getConference')
